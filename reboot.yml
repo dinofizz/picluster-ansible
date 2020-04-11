@@ -1,0 +1,8 @@
+
+---
+- hosts: all 
+  user: pi
+  become: yes
+  become_user: root
+  tasks:
+    - reboot:

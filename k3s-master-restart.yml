@@ -1,0 +1,11 @@
+
+---
+- hosts: k3s_master 
+  user: pi
+  become: yes
+  become_user: root
+  tasks:
+  - name: Restart the k3s service
+    service:
+      name: k3s
+      state: restarted

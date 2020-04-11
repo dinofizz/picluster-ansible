@@ -1,0 +1,127 @@
+---
+- name: 'Install packages'
+  apt:
+    pkg:
+      - adduser
+      - libfontconfig1
+
+- name: Creating prometheus user group
+  group: name="{{groupId}}"
+  become: yes
+  become_user: root
+  become_method: sudo
+
+- name: Creating prometheus user
+  become: yes
+  become_user: root
+  become_method: sudo
+  user:
+    name: "{{userId}}"
+    group: "{{groupId}}"
+    system: yes
+    shell: "/sbin/nologin"
+    comment: "{{userId}} nologin User"
+    createhome: "no"
+    state: present
+
+- name: Install prometheus
+  unarchive:
+    src: 'https://github.com/prometheus/prometheus/releases/latest/download/prometheus-{{ version }}.linux-armv7.tar.gz'
+    dest: /tmp/
+    remote_src: yes
+
+- name: Copy prometheus file to bin
+  become: yes
+  become_user: root
+  become_method: sudo
+  copy:
+    src: "/tmp/prometheus-{{ version }}.linux-armv7/prometheus"
+    dest: "/usr/local/bin/prometheus"
+    owner: "{{userId}}"
+    group: "{{groupId}}"
+    remote_src: yes
+    mode: 0755
+
+- name: Delete prometheus tmp folder
+  file:
+    path: '/tmp/prometheus-{{ version }}.linux-armv7'
+    state: absent
+
+- name: Creates directory
+  become: yes
+  become_user: root
+  become_method: sudo
+  file: 
+    path: "/data/prometheus/"
+    state: directory
+    owner: "{{userId}}"
+    group: "{{groupId}}"
+    mode: 0755
+
+- name: Creates directory
+  become: yes
+  become_user: root
+  become_method: sudo
+  file: 
+    path: "/etc/prometheus/"
+    state: directory
+    owner: "{{userId}}"
+    group: "{{groupId}}"
+    mode: 0755
+
+- name: Display IP address
+  debug:
+    var: hostvars[inventory_hostname]['ansible_facts']['eth0']['ipv4']['address']
+- name: Display host
+  debug:
+    var: inventory_hostname
+
+- name: config file
+  template:
+    src: prometheus.conf.j2
+    dest: /etc/prometheus/prometheus.conf
+
+- name: Copy systemd init file
+  template:
+    src: init.service.j2
+    dest: /etc/systemd/system/prometheus.service
+  notify: systemd_reload
+
+- name: Start prometheus service
+  become: yes
+  become_user: root
+  become_method: sudo
+  service:
+    name: prometheus
+    state: started
+    enabled: yes
+
+- name: Check if prometheus is accessible
+  uri:
+    url: http://localhost:9090
+    method: GET
+    status_code: 200
+
+- name: 'Download Grafana'
+  get_url:
+    url: https://dl.grafana.com/oss/release/grafana_6.6.1_armhf.deb
+    dest: /tmp/
+
+- name: 'Install Grafana'
+  apt:
+    deb: '/tmp/grafana_6.6.1_armhf.deb'
+
+- name: Install/update Grafana status panel plugin
+  grafana_plugin:
+    name: vonage-status-panel
+    version: latest
+    state: present
+
+- name: Start Grafana service
+  become: yes
+  become_user: root
+  become_method: sudo
+  service:
+    name: grafana-server
+    state: started
+    enabled: yes

@@ -1,0 +1,7 @@
+---
+# Default theme
+oh_my_zsh_theme: gallois
+
+# Default plugins
+oh_my_zsh_plugins:
+  - git

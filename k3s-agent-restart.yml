@@ -1,0 +1,11 @@
+
+---
+- hosts: k3s_worker 
+  user: pi
+  become: yes
+  become_user: root
+  tasks:
+  - name: Restart the k3s-agent service
+    service:
+      name: k3s-agent 
+      state: restarted
