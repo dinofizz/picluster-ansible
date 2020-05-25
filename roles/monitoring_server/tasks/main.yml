@@ -26,7 +26,7 @@
 
 - name: Install prometheus
   unarchive:
-    src: 'https://github.com/prometheus/prometheus/releases/latest/download/prometheus-{{ version }}.linux-armv7.tar.gz'
+    src: 'https://github.com/prometheus/prometheus/releases/download/v{{ version }}/prometheus-{{ version }}.linux-armv7.tar.gz'
     dest: /tmp/
     remote_src: yes
 
