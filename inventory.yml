@@ -16,7 +16,7 @@ all:
         greenpi: {}
         redpi: {}
         bluepi: {}
-    k3s_master:
+    k3s_coordinator:
       hosts:
         whitepi: {}
     k3s_worker:

@@ -1,6 +1,6 @@
 
 ---
-- hosts: k3s_master 
+- hosts: k3s_coordinator 
   user: pi
   become: yes
   become_user: root
