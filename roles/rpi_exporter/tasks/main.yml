@@ -20,6 +20,7 @@
     remote_src: yes
 
 - name: Copy RPi Exporter file to bin
+  become: yes
   copy:
     src: "/tmp/rpi_exporter-0.6.0.linux-armv7/rpi_exporter"
     dest: "/usr/local/bin/rpi_exporter"
@@ -41,8 +42,6 @@
 
 - name: Start RPi Exporter service
   become: yes
-  become_user: root
-  become_method: sudo
   service:
     name: rpi_exporter 
     state: started

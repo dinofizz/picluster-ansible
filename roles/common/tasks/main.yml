@@ -22,14 +22,12 @@
     # Suppress warning: [ANSIBLE0006] git used in place of git module
     # Git module doesn't allow us to set `core.autocrlf=input`.
     - skip_ansible_lint
-  become: yes
   # core.autocrlf=input prevents https://github.com/robbyrussell/oh-my-zsh/issues/4402
   command: 'git clone -c core.autocrlf=input --depth=1 https://github.com/robbyrussell/oh-my-zsh.git .oh-my-zsh'
   args:
     chdir: '~{{ ansible_user_id }}'
     creates: '~{{ ansible_user_id }}/.oh-my-zsh'
 - name: 'set permissions of oh-my-zsh for users'
-  become: yes
   file:
     path: '~{{ ansible_user_id }}/.oh-my-zsh'
     # Prevent the cloned repository from having insecure permissions. Failing to do
@@ -40,10 +38,9 @@
 - name: 'set default shell for users'
   become: yes
   user:
-    name: '{{ ansible_user_id }}'
+    name: pi
     shell: /bin/zsh
 - name: 'write .zshrc for users'
-  become: yes
   template:
     src: zshrc.j2
     dest: '~{{ ansible_user_id }}/.zshrc'

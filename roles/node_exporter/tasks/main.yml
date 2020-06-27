@@ -19,6 +19,7 @@
     remote_src: yes
 
 - name: Copy prometheus node exporter file to bin
+  become: yes
   copy:
     src: "/tmp/node_exporter-{{ version }}.linux-armv7/node_exporter"
     dest: "/usr/local/bin/node_exporter"

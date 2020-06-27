@@ -1,0 +1,10 @@
+---
+- hosts: k3s_worker 
+  user: pi
+  become: yes
+  become_user: root
+  tasks:
+  - name: Mount fstab entries
+    shell: mount -a
+    args:
+      warn: false

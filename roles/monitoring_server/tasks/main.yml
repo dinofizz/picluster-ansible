@@ -111,12 +111,6 @@
   apt:
     deb: '/tmp/grafana_{{ grafanaVersion }}_armhf.deb'
 
-- name: Install/update Grafana status panel plugin
-  grafana_plugin:
-    name: vonage-status-panel
-    version: latest
-    state: present
-
 - name: Start Grafana service
   become: yes
   become_user: root
