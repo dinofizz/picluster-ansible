@@ -1,0 +1,18 @@
+---
+- hosts: all
+  user: pi
+  become: yes
+  vars_prompt:
+    - name: insecure_registry_host
+      prompt: "Insecure registry host <HOST>:<URL>"
+      private: no
+
+  tasks:
+    - name: Create k3s directory
+      file:
+        path: /etc/rancher/k3s
+        state: directory
+    - name: Copy Insecure Registry config
+      template:
+        src: insecure-registry.j2
+        dest: /etc/rancher/k3s/registries.yaml
