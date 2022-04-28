@@ -1,5 +1,6 @@
 ---
 - name: 'Install packages'
+  become: yes
   apt:
     pkg:
       - adduser
@@ -77,11 +78,13 @@
     var: inventory_hostname
 
 - name: config file
+  become: yes
   template:
     src: prometheus.conf.j2
     dest: /etc/prometheus/prometheus.conf
 
 - name: Copy systemd init file
+  become: yes
   template:
     src: init.service.j2
     dest: /etc/systemd/system/prometheus.service
@@ -108,6 +111,7 @@
     dest: /tmp/
 
 - name: 'Install Grafana'
+  become: yes
   apt:
     deb: '/tmp/grafana_{{ grafanaVersion }}_armhf.deb'
 

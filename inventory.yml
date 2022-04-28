@@ -18,15 +18,15 @@ all:
         bluepi: {}
     k3s_coordinator:
       hosts:
-        whitepi: {}
+        greenpi: {}
     k3s_worker:
       hosts:
-        greenpi: {}
+        whitepi: {}
         redpi: {}
         bluepi: {}
     monitoring_server:
       hosts:
-        whitepi: {}
+        greenpi: {}
   vars:
     ansible_python_interpreter: /usr/bin/python3
     remote_user: pi
