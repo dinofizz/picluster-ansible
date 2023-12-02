@@ -27,7 +27,7 @@
 
 - name: Install prometheus
   unarchive:
-    src: 'https://github.com/prometheus/prometheus/releases/download/v{{ prometheusVersion }}/prometheus-{{ prometheusVersion }}.linux-armv7.tar.gz'
+    src: 'https://github.com/prometheus/prometheus/releases/download/v{{ prometheusVersion }}/prometheus-{{ prometheusVersion }}.linux-arm64.tar.gz'
     dest: /tmp/
     remote_src: yes
 
@@ -36,7 +36,7 @@
   become_user: root
   become_method: sudo
   copy:
-    src: "/tmp/prometheus-{{ prometheusVersion }}.linux-armv7/prometheus"
+    src: "/tmp/prometheus-{{ prometheusVersion }}.linux-arm64/prometheus"
     dest: "/usr/local/bin/prometheus"
     owner: "{{userId}}"
     group: "{{groupId}}"
@@ -45,7 +45,7 @@
 
 - name: Delete prometheus tmp folder
   file:
-    path: '/tmp/prometheus-{{ prometheusVersion }}.linux-armv7'
+    path: '/tmp/prometheus-{{ prometheusVersion }}.linux-arm64'
     state: absent
 
 - name: Creates directory
@@ -107,13 +107,13 @@
 
 - name: 'Download Grafana'
   get_url:
-    url: 'https://dl.grafana.com/oss/release/grafana_{{ grafanaVersion }}_armhf.deb'
+    url: 'https://dl.grafana.com/oss/release/grafana_{{ grafanaVersion }}_arm64.deb'
     dest: /tmp/
 
 - name: 'Install Grafana'
   become: yes
   apt:
-    deb: '/tmp/grafana_{{ grafanaVersion }}_armhf.deb'
+    deb: '/tmp/grafana_{{ grafanaVersion }}_arm64.deb'
 
 - name: Start Grafana service
   become: yes
